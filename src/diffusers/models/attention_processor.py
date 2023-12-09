@@ -1168,9 +1168,9 @@ class XFormersAttnProcessor:
         key = attn.to_k(encoder_hidden_states, *args)
         value = attn.to_v(encoder_hidden_states, *args)
 
-        query = attn.head_to_batch_dim(query).contiguous()
-        key = attn.head_to_batch_dim(key).contiguous()
-        value = attn.head_to_batch_dim(value).contiguous()
+        query = attn.head_to_batch_dim(query).contiguous().to(torch.float32)
+        key = attn.head_to_batch_dim(key).contiguous().to(torch.float32)
+        value = attn.head_to_batch_dim(value).contiguous().to(torch.float32)
 
         hidden_states = xformers.ops.memory_efficient_attention(
             query, key, value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
